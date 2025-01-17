@@ -1,0 +1,47 @@
+# Ultralytics YOLO 🚀, GPL-3.0 license
+# YOLOv8-pose keypoints/pose estimation model. For Usage examples see https://docs.ultralytics.com/tasks/pose
+
+# Parameters
+nc: 1  # number of classes
+kpt_shape: [5, 3]  # number of keypoints, number of dims (2 for x,y or 3 for x,y,visible)
+depth_multiple: 1.0  # model depth multiple
+width_multiple: 1.0  # layer channel multiple
+
+# custom backbone
+# custom backbone
+backbone:
+  # [from, number, module, args]
+  [ [ -1, 1, AdaptationBlock, [48, 4, 4, null, True]], # 0 adaptation
+    [ -1, 1, Split, [3, 0]], # 1 # descrambled feature map
+    [ -2, 1, Split, [16, 1]], # 2 # block scrambling map
+    [ -2, 1, StemBlock, [16, 3, 2] ],    # 3-P2/4
+    [ -1, 1, Shuffle_Block, [48, 2]], # 4-P3/8
+    [ -1, 2, Shuffle_Block, [48, 1]], # 5
+    [ -1, 1, Shuffle_Block, [96, 2]], # 6-P4/16
+    [ -1, 5, Shuffle_Block, [96, 1]], # 7
+    [ -1, 1, Shuffle_Block, [192, 2]], # 8-P5/32
+    [ -1, 2, Shuffle_Block, [192, 1]], # 9
+    [ -1, 1, SPPF, [192, 5]], # 10
+  ]
+
+# v5lite-e head
+head:
+  [ [ -1, 1, Conv, [48, 1, 1]], # 11
+    [ -1, 1, nn.Upsample, [ None, 2, 'nearest']], # 12
+    [[ -1, 7], 1, Concat, [1]],  # cat backbone P4 # 13
+    [ -1, 1, DWConvblock, [48, 3, 1]],  # 14
+
+    [ -1, 1, Conv, [48, 1, 1]], # 15
+    [ -1, 1, nn.Upsample, [ None, 2, 'nearest']], # 16
+    [[ -1, 5], 1, Concat, [1]],  # cat backbone P3 # 17
+    [ -1, 1, DWConvblock, [48, 3, 1] ],  # 15 (P3/8-small) # 18
+
+    [-1, 1, DWConvblock, [48, 3, 2]], # 19
+    [[ -1, 15], 1, ADD, [1]],  # cat head P4 # 20
+    [ -1, 1, DWConvblock, [48, 3, 1]],  # 18 (P4/16-medium) # 21
+
+    [ -1, 1, DWConvblock, [48, 3, 2]], # 22
+    [[ -1, 11], 1, ADD, [1]],  # cat head P5 # 23
+    [ -1, 1, DWConvblock, [48, 3, 1]],  # 21 (P5/32-large) # 24
+    [[ 1, 2, 18, 21, 24], 1, ScrambledPose, [nc, kpt_shape]],  # Detect(P3, P4, P5) # 25
+  ]

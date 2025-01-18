@@ -1,6 +1,5 @@
-# ThermalImagesDataset
+# Privacy-Preserving People Detection in the Wild
 Repository for scientific paper "Privacy-Preserving People Detection in the Wild"
-
 
 # Paper
 ## Abstract

@@ -19,13 +19,15 @@ extra_params = {
     "scr_inversion_percentage": 0.5,
     "scr_num_blocks": 4,
     "scr_block_size": 4,
-    "scr_unique_blocks": False
+    "scr_unique_blocks": False,
+    # Uncomment next line to enable additional input XORing
+    # "scr_xor": True
 }
 
 models = {
     'YOLOv8n_4x4': {
         "cfg": "privacy/yolov8-scr_4x4_out3.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 4,
             "scr_num_blocks": 4,
@@ -35,7 +37,7 @@ models = {
     },
     'YOLOv8n_4x4_unique': {
         "cfg": "privacy/yolov8-scr_4x4_out3_unique.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 4,
             "scr_num_blocks": 4,
@@ -45,7 +47,7 @@ models = {
     },
     'YOLOv8n_4x8': {
         "cfg": "privacy/yolov8-scr_4x8_out3.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 4,
             "scr_num_blocks": 8,
@@ -55,7 +57,7 @@ models = {
     },
     'YOLOv8n_4x8_unique': {
         "cfg": "privacy/yolov8-scr_4x8_out3_unique.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 4,
             "scr_num_blocks": 8,
@@ -65,7 +67,7 @@ models = {
     },
     'YOLOv8n_8x4': {
         "cfg": "privacy/yolov8-scr_8x4_out3.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 8,
             "scr_num_blocks": 4,
@@ -75,7 +77,7 @@ models = {
     },
     'YOLOv8n_8x4_unique': {
         "cfg": "privacy/yolov8-scr_8x4_out3_unique.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 8,
             "scr_num_blocks": 4,
@@ -85,7 +87,7 @@ models = {
     },
     'YOLOv8n_8x8': {
         "cfg": "privacy/yolov8-scr_8x8_out3.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 8,
             "scr_num_blocks": 8,
@@ -95,7 +97,7 @@ models = {
     },
     'YOLOv8n_8x8_unique': {
         "cfg": "privacy/yolov8-scr_8x8_out3_unique.yaml",
-        "weights": "yolov8n.pt",
+        "weights": "yolov8n_pretrained_on_baseline.pt",
         "override": {
             "scr_block_size": 8,
             "scr_num_blocks": 8,
@@ -106,7 +108,9 @@ models = {
 }
 
 datasets = {
-    "TFW": "./datasets/TFW-outdoor.yaml",
+    "MSCOCO": "./datasets/coco.yaml",
+    "WiderPerson": "./datasets/widerperson.yaml",
+    "CAUCAFall": "./datasets/CAUCAFall.yaml",
 }
 
 
